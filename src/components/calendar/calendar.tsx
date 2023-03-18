@@ -10,6 +10,7 @@ import {
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
+import { format as formatDate } from "date-fns";
 
 export type CalendarProps = {
   dateSetup: DateSetup;
@@ -127,7 +128,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     const topDefaultHeight = headerHeight * 0.5;
     for (let i = 0; i < dateSetup.dates.length; i++) {
       const date = dateSetup.dates[i];
-      const bottomValue = getLocaleMonth(date, locale);
+      const bottomValue = formatDate(new Date(date), "MMM");
       bottomValues.push(
         <text
           key={bottomValue + date.getFullYear()}
@@ -157,7 +158,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={xText}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.5}
           />
         );
       }
@@ -203,7 +204,7 @@ export const Calendar: React.FC<CalendarProps> = ({
               y1Line={0}
               y2Line={topDefaultHeight}
               xText={columnWidth * i + columnWidth * weeksCount * 0.5}
-              yText={topDefaultHeight * 0.9}
+              yText={topDefaultHeight * 0.5}
             />
           );
         }
@@ -221,9 +222,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     const dates = dateSetup.dates;
     for (let i = 0; i < dates.length; i++) {
       const date = dates[i];
-      const bottomValue = `${getLocalDayOfWeek(date, locale, "short")}, ${date
-        .getDate()
-        .toString()}`;
+      const bottomValue = `${formatDate(new Date(date), "do")}`;
 
       bottomValues.push(
         <text
@@ -239,7 +238,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         i + 1 !== dates.length &&
         date.getMonth() !== dates[i + 1].getMonth()
       ) {
-        const topValue = getLocaleMonth(date, locale);
+        const topValue = formatDate(new Date(date), "MMMM");
 
         topValues.push(
           <TopPartOfCalendar
@@ -254,7 +253,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                 columnWidth *
                 0.5
             }
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.5}
           />
         );
       }

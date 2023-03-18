@@ -2,6 +2,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
+var dateFns = require('date-fns');
 
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
@@ -626,21 +627,11 @@ var styles$5 = {"calendarBottomText":"_9w8d5","calendarTopTick":"_1rLuZ","calend
 
 var TopPartOfCalendar = function TopPartOfCalendar(_ref) {
   var value = _ref.value,
-    x1Line = _ref.x1Line,
-    y1Line = _ref.y1Line,
-    y2Line = _ref.y2Line,
     xText = _ref.xText,
     yText = _ref.yText;
   return React__default.createElement("g", {
     className: "calendarTop"
-  }, React__default.createElement("line", {
-    x1: x1Line,
-    y1: y1Line,
-    x2: x1Line,
-    y2: y2Line,
-    className: styles$5.calendarTopTick,
-    key: value + "line"
-  }), React__default.createElement("text", {
+  }, React__default.createElement("text", {
     key: value + "text",
     y: yText,
     x: xText,
@@ -731,7 +722,7 @@ var Calendar = function Calendar(_ref) {
     var topDefaultHeight = headerHeight * 0.5;
     for (var i = 0; i < dateSetup.dates.length; i++) {
       var date = dateSetup.dates[i];
-      var bottomValue = getLocaleMonth(date, locale);
+      var bottomValue = dateFns.format(new Date(date), "MMM");
       bottomValues.push(React__default.createElement("text", {
         key: bottomValue + date.getFullYear(),
         y: headerHeight * 0.8,
@@ -753,7 +744,7 @@ var Calendar = function Calendar(_ref) {
           y1Line: 0,
           y2Line: topDefaultHeight,
           xText: xText,
-          yText: topDefaultHeight * 0.9
+          yText: topDefaultHeight * 0.5
         }));
       }
     }
@@ -787,7 +778,7 @@ var Calendar = function Calendar(_ref) {
             y1Line: 0,
             y2Line: topDefaultHeight,
             xText: columnWidth * i + columnWidth * weeksCount * 0.5,
-            yText: topDefaultHeight * 0.9
+            yText: topDefaultHeight * 0.5
           }));
         }
         weeksCount = 0;
@@ -803,7 +794,7 @@ var Calendar = function Calendar(_ref) {
     var dates = dateSetup.dates;
     for (var i = 0; i < dates.length; i++) {
       var date = dates[i];
-      var bottomValue = getLocalDayOfWeek(date, locale, "short") + ", " + date.getDate().toString();
+      var bottomValue = "" + dateFns.format(new Date(date), "do");
       bottomValues.push(React__default.createElement("text", {
         key: date.getTime(),
         y: headerHeight * 0.8,
@@ -811,7 +802,7 @@ var Calendar = function Calendar(_ref) {
         className: styles$5.calendarBottomText
       }, bottomValue));
       if (i + 1 !== dates.length && date.getMonth() !== dates[i + 1].getMonth()) {
-        var topValue = getLocaleMonth(date, locale);
+        var topValue = dateFns.format(new Date(date), "MMMM");
         topValues.push(React__default.createElement(TopPartOfCalendar, {
           key: topValue + date.getFullYear(),
           value: topValue,
@@ -819,7 +810,7 @@ var Calendar = function Calendar(_ref) {
           y1Line: 0,
           y2Line: topDefaultHeight,
           xText: columnWidth * (i + 1) - getDaysInMonth(date.getMonth(), date.getFullYear()) * columnWidth * 0.5,
-          yText: topDefaultHeight * 0.9
+          yText: topDefaultHeight * 0.5
         }));
       }
     }
