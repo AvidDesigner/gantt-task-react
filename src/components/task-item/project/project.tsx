@@ -2,13 +2,9 @@ import React from "react";
 import { TaskItemProps } from "../task-item";
 import styles from "./project.module.css";
 
-export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
-  const barColor = isSelected
-    ? task.styles.backgroundSelectedColor
-    : task.styles.backgroundColor;
-  const processColor = isSelected
-    ? task.styles.progressSelectedColor
-    : task.styles.progressColor;
+export const Project: React.FC<TaskItemProps> = ({ task }) => {
+  const barColor = task.styles.backgroundColor;
+  const processColor = task.styles.progressColor;
   const projectWith = task.x2 - task.x1;
 
   // const projectLeftTriangle = [
@@ -34,19 +30,19 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
         fill={barColor}
         x={task.x1}
         width={projectWith}
-        y={task.y}
+        y={task.y + 5}
         height={task.height * 0.5}
-        rx={task.barCornerRadius}
-        ry={task.barCornerRadius}
+        ry={8}
+        rx={8}
         className={styles.projectBackground}
       />
       <rect
         x={task.progressX}
         width={task.progressWidth}
-        y={task.y}
+        y={task.y + 5}
         height={task.height * 0.5}
-        ry={task.barCornerRadius}
-        rx={task.barCornerRadius}
+        ry={8}
+        rx={8}
         fill={processColor}
       />
       {/* <rect

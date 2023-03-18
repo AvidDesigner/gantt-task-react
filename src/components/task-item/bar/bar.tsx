@@ -45,7 +45,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               y={task.y + 1}
               width={task.handleWidth}
               height={handleHeight}
-              barCornerRadius={task.barCornerRadius}
+              barCornerRadius={5}
               onMouseDown={e => {
                 onEventStart("start", task, e);
               }}
@@ -57,7 +57,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               y={task.y + 1}
               width={task.handleWidth}
               height={handleHeight}
-              barCornerRadius={task.barCornerRadius}
+              barCornerRadius={5}
               onMouseDown={e => {
                 onEventStart("end", task, e);
               }}

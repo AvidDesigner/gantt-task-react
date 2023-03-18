@@ -204,7 +204,7 @@ export const Calendar: React.FC<CalendarProps> = ({
               y1Line={0}
               y2Line={topDefaultHeight}
               xText={columnWidth * i + columnWidth * weeksCount * 0.5}
-              yText={topDefaultHeight * 0.7}
+              yText={topDefaultHeight * 0.8}
             />
           );
         }
@@ -228,7 +228,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         <text
           key={date.getTime()}
           y={headerHeight * 0.8}
-          x={columnWidth * i + columnWidth * 0.7}
+          x={columnWidth * i + columnWidth * 0.4}
           className={styles.calendarBottomText}
         >
           {bottomValue}
@@ -253,7 +253,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                 columnWidth *
                 0.5
             }
-            yText={topDefaultHeight * 0.7}
+            yText={topDefaultHeight * 0.8}
           />
         );
       }
@@ -298,7 +298,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={columnWidth * i + ticks * columnWidth * 0.5}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.8}
           />
         );
       }
