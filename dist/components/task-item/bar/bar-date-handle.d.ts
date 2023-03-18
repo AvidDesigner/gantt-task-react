@@ -6,6 +6,7 @@ declare type BarDateHandleProps = {
     height: number;
     barCornerRadius: number;
     onMouseDown: (event: React.MouseEvent<SVGRectElement, MouseEvent>) => void;
+    backgroundColor: string;
 };
 export declare const BarDateHandle: React.FC<BarDateHandleProps>;
 export {};

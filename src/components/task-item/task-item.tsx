@@ -37,7 +37,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
   };
   const textRef = useRef<SVGTextElement>(null);
   const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
-  const [isTextInside, setIsTextInside] = useState(true);
+  const [isTextInside] = useState(false);
 
   useEffect(() => {
     switch (task.typeInternal) {
@@ -56,11 +56,11 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     }
   }, [task, isSelected]);
 
-  useEffect(() => {
-    if (textRef.current) {
-      setIsTextInside(textRef.current.getBBox().width < task.x2 - task.x1);
-    }
-  }, [textRef, task]);
+  // useEffect(() => {
+  //   if (textRef.current) {
+  //     setIsTextInside(textRef.current.getBBox().width < task.x2 - task.x1);
+  //   }
+  // }, [textRef, task]);
 
   const getX = () => {
     const width = task.x2 - task.x1;
@@ -108,18 +108,20 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       }}
     >
       {taskItem}
-      <text
-        x={getX()}
-        y={task.y + taskHeight * 0.5}
-        className={
-          isTextInside
-            ? style.barLabel
-            : style.barLabel && style.barLabelOutside
-        }
-        ref={textRef}
-      >
-        {task.name}
-      </text>
+      {task.typeInternal === "task" && (
+        <text
+          x={getX()}
+          y={task.y + taskHeight * 0.75}
+          className={
+            isTextInside
+              ? style.barLabel
+              : style.barLabel && style.barLabelOutside
+          }
+          ref={textRef}
+        >
+          {task.name}
+        </text>
+      )}
     </g>
   );
 };

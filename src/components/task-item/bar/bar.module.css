@@ -9,7 +9,6 @@
 }
 
 .barHandle {
-  fill: #ddd;
   cursor: ew-resize;
   opacity: 0;
   visibility: hidden;

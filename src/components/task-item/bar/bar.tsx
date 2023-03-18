@@ -49,6 +49,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               onMouseDown={e => {
                 onEventStart("start", task, e);
               }}
+              backgroundColor={task.styles.backgroundSelectedColor}
             />
             {/* right */}
             <BarDateHandle
@@ -60,6 +61,7 @@ export const Bar: React.FC<TaskItemProps> = ({
               onMouseDown={e => {
                 onEventStart("end", task, e);
               }}
+              backgroundColor={task.styles.backgroundSelectedColor}
             />
           </g>
         )}

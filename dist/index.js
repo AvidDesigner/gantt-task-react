@@ -778,7 +778,7 @@ var Calendar = function Calendar(_ref) {
             y1Line: 0,
             y2Line: topDefaultHeight,
             xText: columnWidth * i + columnWidth * weeksCount * 0.5,
-            yText: topDefaultHeight * 0.5
+            yText: topDefaultHeight * 0.7
           }));
         }
         weeksCount = 0;
@@ -798,7 +798,7 @@ var Calendar = function Calendar(_ref) {
       bottomValues.push(React__default.createElement("text", {
         key: date.getTime(),
         y: headerHeight * 0.8,
-        x: columnWidth * i + columnWidth * 0.5,
+        x: columnWidth * i + columnWidth * 0.7,
         className: styles$5.calendarBottomText
       }, bottomValue));
       if (i + 1 !== dates.length && date.getMonth() !== dates[i + 1].getMonth()) {
@@ -810,7 +810,7 @@ var Calendar = function Calendar(_ref) {
           y1Line: 0,
           y2Line: topDefaultHeight,
           xText: columnWidth * (i + 1) - getDaysInMonth(date.getMonth(), date.getFullYear()) * columnWidth * 0.5,
-          yText: topDefaultHeight * 0.5
+          yText: topDefaultHeight * 0.7
         }));
       }
     }
@@ -1362,17 +1362,16 @@ var BarDisplay = function BarDisplay(_ref) {
     y = _ref.y,
     width = _ref.width,
     height = _ref.height,
-    isSelected = _ref.isSelected,
     progressX = _ref.progressX,
     progressWidth = _ref.progressWidth,
     barCornerRadius = _ref.barCornerRadius,
     styles = _ref.styles,
     onMouseDown = _ref.onMouseDown;
   var getProcessColor = function getProcessColor() {
-    return isSelected ? styles.progressSelectedColor : styles.progressColor;
+    return styles.progressColor;
   };
   var getBarColor = function getBarColor() {
-    return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
+    return styles.backgroundColor;
   };
   return React__default.createElement("g", {
     onMouseDown: onMouseDown
@@ -1402,13 +1401,15 @@ var BarDateHandle = function BarDateHandle(_ref) {
     width = _ref.width,
     height = _ref.height,
     barCornerRadius = _ref.barCornerRadius,
-    onMouseDown = _ref.onMouseDown;
+    onMouseDown = _ref.onMouseDown,
+    backgroundColor = _ref.backgroundColor;
   return React__default.createElement("rect", {
     x: x,
     y: y,
     width: width,
     height: height,
     className: styles$6.barHandle,
+    fill: backgroundColor,
     ry: barCornerRadius,
     rx: barCornerRadius,
     onMouseDown: onMouseDown
@@ -1460,7 +1461,8 @@ var Bar = function Bar(_ref) {
     barCornerRadius: task.barCornerRadius,
     onMouseDown: function onMouseDown(e) {
       onEventStart("start", task, e);
-    }
+    },
+    backgroundColor: task.styles.backgroundSelectedColor
   }), React__default.createElement(BarDateHandle, {
     x: task.x2 - task.handleWidth - 1,
     y: task.y + 1,
@@ -1469,7 +1471,8 @@ var Bar = function Bar(_ref) {
     barCornerRadius: task.barCornerRadius,
     onMouseDown: function onMouseDown(e) {
       onEventStart("end", task, e);
-    }
+    },
+    backgroundColor: task.styles.backgroundSelectedColor
   })), isProgressChangeable && React__default.createElement(BarProgressHandle, {
     progressPoint: progressPoint,
     onMouseDown: function onMouseDown(e) {
@@ -1549,8 +1552,6 @@ var Project = function Project(_ref) {
   var barColor = isSelected ? task.styles.backgroundSelectedColor : task.styles.backgroundColor;
   var processColor = isSelected ? task.styles.progressSelectedColor : task.styles.progressColor;
   var projectWith = task.x2 - task.x1;
-  var projectLeftTriangle = [task.x1, task.y + task.height / 2 - 1, task.x1, task.y + task.height, task.x1 + 15, task.y + task.height / 2 - 1].join(",");
-  var projectRightTriangle = [task.x2, task.y + task.height / 2 - 1, task.x2, task.y + task.height, task.x2 - 15, task.y + task.height / 2 - 1].join(",");
   return React__default.createElement("g", {
     tabIndex: 0,
     className: styles$8.projectWrapper
@@ -1559,7 +1560,7 @@ var Project = function Project(_ref) {
     x: task.x1,
     width: projectWith,
     y: task.y,
-    height: task.height,
+    height: task.height * 0.5,
     rx: task.barCornerRadius,
     ry: task.barCornerRadius,
     className: styles$8.projectBackground
@@ -1567,27 +1568,10 @@ var Project = function Project(_ref) {
     x: task.progressX,
     width: task.progressWidth,
     y: task.y,
-    height: task.height,
+    height: task.height * 0.5,
     ry: task.barCornerRadius,
     rx: task.barCornerRadius,
     fill: processColor
-  }), React__default.createElement("rect", {
-    fill: barColor,
-    x: task.x1,
-    width: projectWith,
-    y: task.y,
-    height: task.height / 2,
-    rx: task.barCornerRadius,
-    ry: task.barCornerRadius,
-    className: styles$8.projectTop
-  }), React__default.createElement("polygon", {
-    className: styles$8.projectTop,
-    points: projectLeftTriangle,
-    fill: barColor
-  }), React__default.createElement("polygon", {
-    className: styles$8.projectTop,
-    points: projectRightTriangle,
-    fill: barColor
   }));
 };
 
@@ -1606,9 +1590,8 @@ var TaskItem = function TaskItem(props) {
   var _useState = React.useState(React__default.createElement("div", null)),
     taskItem = _useState[0],
     setTaskItem = _useState[1];
-  var _useState2 = React.useState(true),
-    isTextInside = _useState2[0],
-    setIsTextInside = _useState2[1];
+  var _useState2 = React.useState(false),
+    isTextInside = _useState2[0];
   React.useEffect(function () {
     switch (task.typeInternal) {
       case "milestone":
@@ -1625,11 +1608,6 @@ var TaskItem = function TaskItem(props) {
         break;
     }
   }, [task, isSelected]);
-  React.useEffect(function () {
-    if (textRef.current) {
-      setIsTextInside(textRef.current.getBBox().width < task.x2 - task.x1);
-    }
-  }, [textRef, task]);
   var getX = function getX() {
     var width = task.x2 - task.x1;
     var hasChild = task.barChildren.length > 0;
@@ -1668,9 +1646,9 @@ var TaskItem = function TaskItem(props) {
     onFocus: function onFocus() {
       onEventStart("select", task);
     }
-  }, taskItem, React__default.createElement("text", {
+  }, taskItem, task.typeInternal === "task" && React__default.createElement("text", {
     x: getX(),
-    y: task.y + taskHeight * 0.5,
+    y: task.y + taskHeight * 0.75,
     className: isTextInside ? style.barLabel :  style.barLabelOutside,
     ref: textRef
   }, task.name));
