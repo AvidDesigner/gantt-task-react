@@ -778,7 +778,7 @@ var Calendar = function Calendar(_ref) {
             y1Line: 0,
             y2Line: topDefaultHeight,
             xText: columnWidth * i + columnWidth * weeksCount * 0.5,
-            yText: topDefaultHeight * 0.7
+            yText: topDefaultHeight * 0.8
           }));
         }
         weeksCount = 0;
@@ -798,7 +798,7 @@ var Calendar = function Calendar(_ref) {
       bottomValues.push(React__default.createElement("text", {
         key: date.getTime(),
         y: headerHeight * 0.8,
-        x: columnWidth * i + columnWidth * 0.7,
+        x: columnWidth * i + columnWidth * 0.4,
         className: styles$5.calendarBottomText
       }, bottomValue));
       if (i + 1 !== dates.length && date.getMonth() !== dates[i + 1].getMonth()) {
@@ -810,7 +810,7 @@ var Calendar = function Calendar(_ref) {
           y1Line: 0,
           y2Line: topDefaultHeight,
           xText: columnWidth * (i + 1) - getDaysInMonth(date.getMonth(), date.getFullYear()) * columnWidth * 0.5,
-          yText: topDefaultHeight * 0.7
+          yText: topDefaultHeight * 0.8
         }));
       }
     }
@@ -843,7 +843,7 @@ var Calendar = function Calendar(_ref) {
           y1Line: 0,
           y2Line: topDefaultHeight,
           xText: columnWidth * i + ticks * columnWidth * 0.5,
-          yText: topDefaultHeight * 0.9
+          yText: topDefaultHeight * 0.8
         }));
       }
     }
@@ -1364,7 +1364,6 @@ var BarDisplay = function BarDisplay(_ref) {
     height = _ref.height,
     progressX = _ref.progressX,
     progressWidth = _ref.progressWidth,
-    barCornerRadius = _ref.barCornerRadius,
     styles = _ref.styles,
     onMouseDown = _ref.onMouseDown;
   var getProcessColor = function getProcessColor() {
@@ -1380,8 +1379,8 @@ var BarDisplay = function BarDisplay(_ref) {
     width: width,
     y: y,
     height: height,
-    ry: barCornerRadius,
-    rx: barCornerRadius,
+    ry: 8,
+    rx: 8,
     fill: getBarColor(),
     className: styles$6.barBackground
   }), React__default.createElement("rect", {
@@ -1389,8 +1388,8 @@ var BarDisplay = function BarDisplay(_ref) {
     width: progressWidth,
     y: y,
     height: height,
-    ry: barCornerRadius,
-    rx: barCornerRadius,
+    ry: 8,
+    rx: 8,
     fill: getProcessColor()
   }));
 };
@@ -1458,7 +1457,7 @@ var Bar = function Bar(_ref) {
     y: task.y + 1,
     width: task.handleWidth,
     height: handleHeight,
-    barCornerRadius: task.barCornerRadius,
+    barCornerRadius: 5,
     onMouseDown: function onMouseDown(e) {
       onEventStart("start", task, e);
     },
@@ -1468,7 +1467,7 @@ var Bar = function Bar(_ref) {
     y: task.y + 1,
     width: task.handleWidth,
     height: handleHeight,
-    barCornerRadius: task.barCornerRadius,
+    barCornerRadius: 5,
     onMouseDown: function onMouseDown(e) {
       onEventStart("end", task, e);
     },
@@ -1547,10 +1546,9 @@ var Milestone = function Milestone(_ref) {
 var styles$8 = {"projectWrapper":"_1KJ6x","projectBackground":"_2RbVy","projectTop":"_2pZMF"};
 
 var Project = function Project(_ref) {
-  var task = _ref.task,
-    isSelected = _ref.isSelected;
-  var barColor = isSelected ? task.styles.backgroundSelectedColor : task.styles.backgroundColor;
-  var processColor = isSelected ? task.styles.progressSelectedColor : task.styles.progressColor;
+  var task = _ref.task;
+  var barColor = task.styles.backgroundColor;
+  var processColor = task.styles.progressColor;
   var projectWith = task.x2 - task.x1;
   return React__default.createElement("g", {
     tabIndex: 0,
@@ -1559,18 +1557,18 @@ var Project = function Project(_ref) {
     fill: barColor,
     x: task.x1,
     width: projectWith,
-    y: task.y,
+    y: task.y + 5,
     height: task.height * 0.5,
-    rx: task.barCornerRadius,
-    ry: task.barCornerRadius,
+    ry: 8,
+    rx: 8,
     className: styles$8.projectBackground
   }), React__default.createElement("rect", {
     x: task.progressX,
     width: task.progressWidth,
-    y: task.y,
+    y: task.y + 5,
     height: task.height * 0.5,
-    ry: task.barCornerRadius,
-    rx: task.barCornerRadius,
+    ry: 8,
+    rx: 8,
     fill: processColor
   }));
 };
@@ -1648,7 +1646,7 @@ var TaskItem = function TaskItem(props) {
     }
   }, taskItem, task.typeInternal === "task" && React__default.createElement("text", {
     x: getX(),
-    y: task.y + taskHeight * 0.75,
+    y: task.y + taskHeight * 0.65,
     className: isTextInside ? style.barLabel :  style.barLabelOutside,
     ref: textRef
   }, task.name));
