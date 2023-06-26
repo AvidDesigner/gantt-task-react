@@ -88,14 +88,22 @@ var startOfDate = function startOfDate(date, scale) {
   return newDate;
 };
 var ganttDateRange = function ganttDateRange(tasks, viewMode, preStepsCount) {
-  var newStartDate = tasks[0].start;
-  var newEndDate = tasks[0].start;
+  var tasksWithDates = tasks.filter(function (task) {
+    return !!task.start && !!task.end;
+  });
+  var newStartDate = new Date();
+  var month = newStartDate.getMonth();
+  var newEndDate = new Date(newStartDate.getDate(), month + 2, newStartDate.getFullYear());
+  if (tasksWithDates) {
+    newStartDate = tasksWithDates[0].start;
+    newEndDate = tasksWithDates[0].end;
+  }
   for (var _iterator = _createForOfIteratorHelperLoose(tasks), _step; !(_step = _iterator()).done;) {
     var task = _step.value;
-    if (task.start < newStartDate) {
+    if (!!task.start && task.start < newStartDate) {
       newStartDate = task.start;
     }
-    if (task.end > newEndDate) {
+    if (!!task.end && task.end > newEndDate) {
       newEndDate = task.end;
     }
   }
@@ -1038,17 +1046,18 @@ var convertToBarTask = function convertToBarTask(task, index, dates, columnWidth
   return barTask;
 };
 var convertToBar = function convertToBar(task, index, dates, columnWidth, rowHeight, taskHeight, barCornerRadius, handleWidth, rtl, barProgressColor, barProgressSelectedColor, barBackgroundColor, barBackgroundSelectedColor) {
+  var _x, _x2;
   var x1;
   var x2;
   if (rtl) {
-    x2 = taskXCoordinateRTL(task.start, dates, columnWidth);
-    x1 = taskXCoordinateRTL(task.end, dates, columnWidth);
+    x2 = task.start ? taskXCoordinateRTL(task.start, dates, columnWidth) : null;
+    x1 = task.end ? taskXCoordinateRTL(task.end, dates, columnWidth) : null;
   } else {
-    x1 = taskXCoordinate(task.start, dates, columnWidth);
-    x2 = taskXCoordinate(task.end, dates, columnWidth);
+    x1 = task.start ? taskXCoordinate(task.start, dates, columnWidth) : null;
+    x2 = task.end ? taskXCoordinate(task.end, dates, columnWidth) : null;
   }
   var typeInternal = task.type;
-  if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
+  if (typeInternal === "task" && x2 && x1 && x2 - x1 < handleWidth * 2) {
     typeInternal = "smalltask";
     x2 = x1 + handleWidth * 2;
   }
@@ -1063,10 +1072,12 @@ var convertToBar = function convertToBar(task, index, dates, columnWidth, rowHei
     progressColor: barProgressColor,
     progressSelectedColor: barProgressSelectedColor
   }, task.styles);
+  var newX1 = (_x = x1) != null ? _x : 0;
+  var newX2 = (_x2 = x2) != null ? _x2 : 0;
   return _extends({}, task, {
     typeInternal: typeInternal,
-    x1: x1,
-    x2: x2,
+    x1: newX1,
+    x2: newX2,
     y: y,
     index: index,
     progressX: progressX,
@@ -1128,12 +1139,12 @@ var taskYCoordinate = function taskYCoordinate(index, rowHeight, taskHeight) {
   return y;
 };
 var progressWithByParams = function progressWithByParams(taskX1, taskX2, progress, rtl) {
-  var progressWidth = (taskX2 - taskX1) * progress * 0.01;
+  var progressWidth = taskX1 && taskX2 ? (taskX2 - taskX1) * progress * 0.01 : 0;
   var progressX;
   if (rtl) {
-    progressX = taskX2 - progressWidth;
+    progressX = taskX2 ? taskX2 - progressWidth : 0;
   } else {
-    progressX = taskX1;
+    progressX = taskX1 != null ? taskX1 : 0;
   }
   return [progressWidth, progressX];
 };
@@ -1440,8 +1451,8 @@ var Bar = function Bar(_ref) {
   }, React__default.createElement(BarDisplay, {
     x: task.x1,
     y: task.y,
-    width: task.x2 - task.x1,
-    height: task.height,
+    width: task.hide ? 0 : task.x2 - task.x1,
+    height: task.hide ? 0 : task.height,
     progressX: task.progressX,
     progressWidth: task.progressWidth,
     barCornerRadius: task.barCornerRadius,
@@ -1644,7 +1655,7 @@ var TaskItem = function TaskItem(props) {
     onFocus: function onFocus() {
       onEventStart("select", task);
     }
-  }, taskItem, task.typeInternal === "task" && React__default.createElement("text", {
+  }, taskItem, task.typeInternal === "task" && !task.hide && React__default.createElement("text", {
     x: getX(),
     y: task.y + taskHeight * 0.65,
     className: isTextInside ? style.barLabel :  style.barLabelOutside,
@@ -2150,7 +2161,7 @@ var Gantt = function Gantt(_ref) {
         var prevStateTask = barTasks.find(function (t) {
           return t.id === changedTask.id;
         });
-        if (prevStateTask && (prevStateTask.start.getTime() !== changedTask.start.getTime() || prevStateTask.end.getTime() !== changedTask.end.getTime() || prevStateTask.progress !== changedTask.progress)) {
+        if (prevStateTask && prevStateTask.start && prevStateTask.end && (prevStateTask.start.getTime() !== changedTask.start.getTime() || prevStateTask.end.getTime() !== changedTask.end.getTime() || prevStateTask.progress !== changedTask.progress)) {
           var newTaskList = barTasks.map(function (t) {
             return t.id === changedTask.id ? changedTask : t;
           });

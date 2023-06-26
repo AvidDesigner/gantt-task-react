@@ -108,7 +108,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       }}
     >
       {taskItem}
-      {task.typeInternal === "task" && (
+      {task.typeInternal === "task" && !task.hide && (
         <text
           x={getX()}
           y={task.y + taskHeight * 0.65}

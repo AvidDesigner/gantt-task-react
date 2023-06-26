@@ -210,6 +210,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         const prevStateTask = barTasks.find(t => t.id === changedTask.id);
         if (
           prevStateTask &&
+          prevStateTask.start &&
+          prevStateTask.end &&
           (prevStateTask.start.getTime() !== changedTask.start.getTime() ||
             prevStateTask.end.getTime() !== changedTask.end.getTime() ||
             prevStateTask.progress !== changedTask.progress)

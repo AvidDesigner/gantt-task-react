@@ -151,17 +151,17 @@ const convertToBar = (
   barBackgroundColor: string,
   barBackgroundSelectedColor: string
 ): BarTask => {
-  let x1: number;
-  let x2: number;
+  let x1: number | null;
+  let x2: number | null;
   if (rtl) {
-    x2 = taskXCoordinateRTL(task.start, dates, columnWidth);
-    x1 = taskXCoordinateRTL(task.end, dates, columnWidth);
+    x2 = task.start ? taskXCoordinateRTL(task.start, dates, columnWidth) : null;
+    x1 = task.end ? taskXCoordinateRTL(task.end, dates, columnWidth) : null;
   } else {
-    x1 = taskXCoordinate(task.start, dates, columnWidth);
-    x2 = taskXCoordinate(task.end, dates, columnWidth);
+    x1 = task.start ? taskXCoordinate(task.start, dates, columnWidth) : null;
+    x2 = task.end ? taskXCoordinate(task.end, dates, columnWidth) : null;
   }
   let typeInternal: TaskTypeInternal = task.type;
-  if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
+  if (typeInternal === "task" && x2 && x1 && x2 - x1 < handleWidth * 2) {
     typeInternal = "smalltask";
     x2 = x1 + handleWidth * 2;
   }
@@ -182,11 +182,15 @@ const convertToBar = (
     progressSelectedColor: barProgressSelectedColor,
     ...task.styles,
   };
+
+  const newX1 = x1 ?? 0;
+  const newX2 = x2 ?? 0;
+
   return {
     ...task,
     typeInternal,
-    x1,
-    x2,
+    x1: newX1,
+    x2: newX2,
     y,
     index,
     progressX,
@@ -274,17 +278,18 @@ const taskYCoordinate = (
 };
 
 export const progressWithByParams = (
-  taskX1: number,
-  taskX2: number,
+  taskX1: number | null,
+  taskX2: number | null,
   progress: number,
   rtl: boolean
 ) => {
-  const progressWidth = (taskX2 - taskX1) * progress * 0.01;
+  const progressWidth =
+    taskX1 && taskX2 ? (taskX2 - taskX1) * progress * 0.01 : 0;
   let progressX: number;
   if (rtl) {
-    progressX = taskX2 - progressWidth;
+    progressX = taskX2 ? taskX2 - progressWidth : 0;
   } else {
-    progressX = taskX1;
+    progressX = taskX1 ?? 0;
   }
   return [progressWidth, progressX];
 };
