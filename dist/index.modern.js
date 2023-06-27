@@ -1582,23 +1582,15 @@ var Project = function Project(_ref) {
   }));
 };
 
-var style = {"barLabel":"_3zRJQ","barLabelOutside":"_3KcaM"};
-
 var TaskItem = function TaskItem(props) {
   var _props = _extends({}, props),
     task = _props.task,
-    arrowIndent = _props.arrowIndent,
     isDelete = _props.isDelete,
-    taskHeight = _props.taskHeight,
     isSelected = _props.isSelected,
-    rtl = _props.rtl,
     onEventStart = _props.onEventStart;
-  var textRef = useRef(null);
   var _useState = useState(React.createElement("div", null)),
     taskItem = _useState[0],
     setTaskItem = _useState[1];
-  var _useState2 = useState(false),
-    isTextInside = _useState2[0];
   useEffect(function () {
     switch (task.typeInternal) {
       case "milestone":
@@ -1615,18 +1607,6 @@ var TaskItem = function TaskItem(props) {
         break;
     }
   }, [task, isSelected]);
-  var getX = function getX() {
-    var width = task.x2 - task.x1;
-    var hasChild = task.barChildren.length > 0;
-    if (isTextInside) {
-      return task.x1 + width * 0.5;
-    }
-    if (rtl && textRef.current) {
-      return task.x1 - textRef.current.getBBox().width - arrowIndent * +hasChild - arrowIndent * 0.2;
-    } else {
-      return task.x1 + width + arrowIndent * +hasChild + arrowIndent * 0.2;
-    }
-  };
   return React.createElement("g", {
     onKeyDown: function onKeyDown(e) {
       switch (e.key) {
@@ -1653,12 +1633,7 @@ var TaskItem = function TaskItem(props) {
     onFocus: function onFocus() {
       onEventStart("select", task);
     }
-  }, taskItem, task.typeInternal === "task" && !task.hide && React.createElement("text", {
-    x: getX(),
-    y: task.y + taskHeight * 0.65,
-    className: isTextInside ? style.barLabel :  style.barLabelOutside,
-    ref: textRef
-  }, task.name));
+  }, taskItem);
 };
 
 var TaskGanttContent = function TaskGanttContent(_ref) {

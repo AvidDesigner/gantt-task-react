@@ -134,6 +134,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         onDateChange &&
         isNotLikeOriginal
       ) {
+        event.stopPropagation();
+
         try {
           const result = await onDateChange(
             newChangedTask,
@@ -146,6 +148,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
           operationSuccess = false;
         }
       } else if (onProgressChange && isNotLikeOriginal) {
+        event.stopPropagation();
+
         try {
           const result = await onProgressChange(
             newChangedTask,
